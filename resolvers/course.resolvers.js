@@ -2,23 +2,28 @@
 const Course = require('../models/course')
 const resolvers = {
   Query: {
-    getCourses(obj, { page, limit }){
+    async getCourses(obj, { page, limit }){
+      const allCourses = await Course.find();      
       if(page !== undefined){
-        return courses.slice((page - 1) * limit, page * limit )
+        return allCourses.slice((page - 1) * limit, page * limit )
       }
-      return courses;
+      return allCourses;
     },
-    getCourse(obj, { id }){
-      return courses.find(course => course.id == id)
+    async getCourse(obj, { id }){
+      return await Course.findById(id);      
     }
   },
   
   Mutation: {
     async addCourse(obj, { input }){
-      const course = new Course(input);
-      await course.save()
-      return course;
+      const existCourse = await Course.find({ title: input.title })         
+      if(!existCourse.length){
+        const newCourse   = new Course(input);
+        return await newCourse.save()
+      }
+      return { id: 0, title: "Ya existe el curso con nombre: " + input.title }
     },
+    
     updateCourse(obj, { id, input }){
       const indexCourse   = courses.findIndex(curso => id == curso.id);
       const currentCourse = courses[indexCourse];
