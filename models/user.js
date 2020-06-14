@@ -4,7 +4,7 @@ const userSchema = new Schema({
   email: String,
   hashedPassword: {
     type: String,
-    required: true
+    // required: true
   },
   token: String
 });

@@ -34,8 +34,8 @@ const resolver = {}
 
 
 const schema = makeExecutableSchema({
-  typeDefs: [typeDefs, courseTypesDefs], 
-  resolvers: merge(resolver, courseResolver)
+  typeDefs: [typeDefs, courseTypesDefs, userTypesDefs], 
+  resolvers: merge(resolver, courseResolver, userResolver)
 })
 
 

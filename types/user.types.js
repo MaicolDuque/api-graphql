@@ -1,4 +1,4 @@
-module.exports.userTypes = `
+module.exports = `
   type User {
     id: ID!
     email: String!
@@ -8,7 +8,7 @@ module.exports.userTypes = `
 
   extend type Query {
     getUsers: [User]
-    getUser(id: ID!)
+    getUser(id: ID!): User
   }
 
   input UserInput {
@@ -22,4 +22,4 @@ module.exports.userTypes = `
     signOut: Alert
   }
 
-`
+`;
