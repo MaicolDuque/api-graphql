@@ -1,5 +1,7 @@
 
-const Course = require('../models/course')
+const Course = require('../models/course');
+const User = require('../models/user');
+
 const resolvers = {
   Query: {
     async getCourses(obj, { page, limit }) {
@@ -18,13 +20,12 @@ const resolvers = {
   },
 
   Mutation: {
-    async addCourse(obj, { input }) {
-      const existCourse = await Course.find({ title: input.title })
-      if (!existCourse.length) {
-        const newCourse = new Course(input);
-        return await newCourse.save()
-      }
-      return { id: 0, title: "Ya existe el curso con nombre: " + input.title }
+    async addCourse(obj, { input, user }) {
+      const userObj = await User.findById(user);
+      const course = new Course({ ...input, user });
+      await course.save();
+      await userObj.courses.push(course);
+      return course;
     },
 
     async updateCourse(obj, { id, input }) {

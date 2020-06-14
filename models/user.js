@@ -6,7 +6,11 @@ const userSchema = new Schema({
     type: String,
     // required: true
   },
-  token: String
+  token: String,
+  courses: [{
+    type: Schema.Types.ObjectId, // reference every ID of your courses
+    ref: 'Course'
+  }]
 });
 
 module.exports = model('User', userSchema);

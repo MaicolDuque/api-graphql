@@ -8,7 +8,8 @@ module.exports =  `
   type Course {
     id: ID!,
     title: String,
-    views: Int
+    views: Int,
+    user: String
   }
 
   extend type Query {
@@ -17,7 +18,7 @@ module.exports =  `
   }
 
   extend type Mutation {
-    addCourse(input: CourseInput): Course
+    addCourse(input: CourseInput, user: ID!): Course
     updateCourse(id: ID!, input: CourseInput): Course
     deleteCourse(id: ID!): Alert
   }
