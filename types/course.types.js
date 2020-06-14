@@ -9,7 +9,7 @@ module.exports =  `
     id: ID!,
     title: String,
     views: Int,
-    user: String
+    user: User
   }
 
   extend type Query {
