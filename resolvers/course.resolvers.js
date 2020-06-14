@@ -2,39 +2,37 @@
 const Course = require('../models/course')
 const resolvers = {
   Query: {
-    async getCourses(obj, { page, limit }){
-      const allCourses = await Course.find();      
-      if(page !== undefined){
-        return allCourses.slice((page - 1) * limit, page * limit )
+    async getCourses(obj, { page, limit }) {
+      let allCourses =  Course.find();
+      if (page !== undefined) {
+        allCourses = allCourses.limit(limit).skip((page - 1) * limit, page * limit);
       }
-      return allCourses;
+      // if (page !== undefined) {
+      //   return allCourses.slice((page - 1) * limit, page * limit)
+      // }
+      return await allCourses;
     },
-    async getCourse(obj, { id }){
-      return await Course.findById(id);      
+    async getCourse(obj, { id }) {
+      return await Course.findById(id);
     }
   },
-  
+
   Mutation: {
-    async addCourse(obj, { input }){
-      const existCourse = await Course.find({ title: input.title })         
-      if(!existCourse.length){
-        const newCourse   = new Course(input);
+    async addCourse(obj, { input }) {
+      const existCourse = await Course.find({ title: input.title })
+      if (!existCourse.length) {
+        const newCourse = new Course(input);
         return await newCourse.save()
       }
       return { id: 0, title: "Ya existe el curso con nombre: " + input.title }
     },
-    
-    updateCourse(obj, { id, input }){
-      const indexCourse   = courses.findIndex(curso => id == curso.id);
-      const currentCourse = courses[indexCourse];
-      
-      const newCourse     = Object.assign(currentCourse, input );
-      courses[indexCourse] = newCourse;
-  
-      return newCourse;
+
+    async updateCourse(obj, { id, input }) {
+      const course = await Course.findByIdAndUpdate(id, input);
+      return course;
     },
-    deleteCourse(obj, { id }){
-      courses = courses.filter(course => course.id != id)
+    async deleteCourse(obj, { id }) {
+      await Course.deleteOne({ _id: id });
       return {
         message: `El curso con el id: ${id} fue eliminado correctamente.`
       }

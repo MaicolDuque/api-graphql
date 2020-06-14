@@ -6,8 +6,11 @@ const { merge } = require('lodash');
 const { graphqlExpress, graphiqlExpress } = require('graphql-server-express')
 const { makeExecutableSchema } = require('graphql-tools')
 
-const courseTypesDefs = require('./types/course.types')
-const courseResolver  = require('./resolvers/course.resolvers')
+const courseTypesDefs = require('./types/course.types');
+const courseResolver  = require('./resolvers/course.resolvers');
+
+const userTypesDefs = require('./types/user.types');
+const userResolver  = require('./resolvers/user.resolvers');
 
 mongoose.connect('mongodb://localhost/graphql_db', { useNewUrlParser: true, useUnifiedTopology: true })
 
@@ -27,8 +30,9 @@ const typeDefs = `
   }
 
 `
-
 const resolver = {}
+
+
 const schema = makeExecutableSchema({
   typeDefs: [typeDefs, courseTypesDefs], 
   resolvers: merge(resolver, courseResolver)
@@ -41,6 +45,6 @@ app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }))
 
 
 app.listen(8080, ()=> {
-  console.log("Servidor iniciado...");
+  console.log("Servidor iniciado: http://localhost:8080");
 })
 

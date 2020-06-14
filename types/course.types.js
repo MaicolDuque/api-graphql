@@ -1,13 +1,13 @@
 module.exports =  `
 
   input CourseInput {
-    title: String!,
+    title: String,
     views: Int
   }
 
   type Course {
     id: ID!,
-    title: String!,
+    title: String,
     views: Int
   }
 
