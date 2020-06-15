@@ -16,6 +16,16 @@ module.exports = {
       const user = new User(input);
       await user.save();
       return user;
+    },
+    
+    async logIn(obj, { input }){
+      try {
+        const user = User.authenticate(input);
+        return user;
+      } catch (error) {
+        console.log(error);
+        return null;
+      }
     }
   },
   User: { //User: hace referencia al type User
