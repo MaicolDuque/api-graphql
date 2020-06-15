@@ -11,6 +11,8 @@ const courseResolver  = require('./resolvers/course.resolvers');
 const userTypesDefs = require('./types/user.types');
 const userResolver  = require('./resolvers/user.resolvers');
 
+const authFunction = require('./libs/auth');
+
 mongoose.connect('mongodb://localhost/graphql_db', { useNewUrlParser: true, useUnifiedTopology: true })
 
 const app = express();
@@ -33,7 +35,8 @@ const resolver = {}
 
 const server = new ApolloServer({
   typeDefs: [typeDefs, courseTypesDefs, userTypesDefs], 
-  resolvers: merge(resolver, courseResolver, userResolver)
+  resolvers: merge(resolver, courseResolver, userResolver),
+  context: authFunction
 });
 
 server.applyMiddleware({app: app});

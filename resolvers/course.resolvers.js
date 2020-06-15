@@ -4,7 +4,8 @@ const User = require('../models/user');
 
 const resolvers = {
   Query: {
-    async getCourses(obj, { page, limit }) {
+    async getCourses(obj, { page, limit }, context ) {
+      console.log(context);
       let allCourses =  Course.find(); // .populate => Me retorna todo el objeto usuario que hace march con el ID
       if (page !== undefined) {
         allCourses = allCourses.limit(limit).skip((page - 1) * limit, page * limit);
