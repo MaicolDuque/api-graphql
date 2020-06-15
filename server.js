@@ -3,8 +3,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const { merge } = require('lodash');
 
-const { graphqlExpress, graphiqlExpress } = require('graphql-server-express')
-const { makeExecutableSchema } = require('graphql-tools')
+const { ApolloServer } = require('apollo-server-express');
 
 const courseTypesDefs = require('./types/course.types');
 const courseResolver  = require('./resolvers/course.resolvers');
@@ -32,17 +31,12 @@ const typeDefs = `
 `
 const resolver = {}
 
-
-const schema = makeExecutableSchema({
+const server = new ApolloServer({
   typeDefs: [typeDefs, courseTypesDefs, userTypesDefs], 
   resolvers: merge(resolver, courseResolver, userResolver)
-})
+});
 
-
-
-app.use('/graphql', bodyParser.json(), graphqlExpress({ schema: schema }))
-app.use('/graphiql', graphiqlExpress({ endpointURL: '/graphql' }))
-
+server.applyMiddleware({app: app});
 
 app.listen(8080, ()=> {
   console.log("Servidor iniciado: http://localhost:8080");
