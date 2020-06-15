@@ -5,7 +5,7 @@ const User = require('../models/user');
 const resolvers = {
   Query: {
     async getCourses(obj, { page, limit }) {
-      let allCourses =  Course.find().populate('user'); // .populate => Me retorna todo el objeto usuario que hace march con el ID
+      let allCourses =  Course.find(); // .populate => Me retorna todo el objeto usuario que hace march con el ID
       if (page !== undefined) {
         allCourses = allCourses.limit(limit).skip((page - 1) * limit, page * limit);
       }
@@ -24,7 +24,8 @@ const resolvers = {
       const userObj = await User.findById(user);
       const course = new Course({ ...input, user });
       await course.save();
-      await userObj.courses.push(course);
+      userObj.courses.push(course);
+      await userObj.save();
       return course;
     },
 
@@ -37,6 +38,11 @@ const resolvers = {
       return {
         message: `El curso con el id: ${id} fue eliminado correctamente.`
       }
+    }
+  },
+  Course: {
+    async user(padre){
+      return await User.findById(padre.user);
     }
   }
 }
